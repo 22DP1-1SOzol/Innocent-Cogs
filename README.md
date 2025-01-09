@@ -15,7 +15,7 @@ Things it should have:
 8. Settings
 9. Dark/Light mode
 10. Color customization
-11. WEB style notes
+11. evidence board
 12. Undo
 13. Image insert
 14. image delete
@@ -27,6 +27,7 @@ Things it should have:
 20. Logo
 21. ...
 
+Languages used: 
 
 Presentation
 
