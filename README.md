@@ -25,7 +25,7 @@ Things it should have:
 18. Short keys from Right click
 19. Dropdown menu
 20. Logo
-21. ...
+21. Add reminders to notes(calander or smth)
 
 Languages used: 
 
