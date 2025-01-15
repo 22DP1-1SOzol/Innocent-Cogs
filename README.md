@@ -26,9 +26,3 @@ Things it should have:
 19. Dropdown menu
 20. Logo
 21. Add reminders to notes(calander or smth)
-
-Languages used: 
-
-Presentation
-
-1. slide
