@@ -18,6 +18,7 @@ Things it should have:
 11. evidence board
 12. Undo
 13. Image insert
+    + As a background
 14. image delete
 15. Add notes to images
 16. Folders
