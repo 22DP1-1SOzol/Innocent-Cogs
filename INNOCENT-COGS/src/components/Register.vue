@@ -20,7 +20,7 @@
   </script>
   
   <style scoped>
-  /* Add any custom styles or styles from the tutorial */
+  /* Add your styles here */
   .register-container {
     width: 300px;
     margin: 0 auto;

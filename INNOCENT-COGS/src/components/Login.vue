@@ -18,7 +18,7 @@
   </script>
   
   <style scoped>
-  /* Add any custom styles or styles from the tutorial */
+  /* Add your styles here */
   .login-container {
     width: 300px;
     margin: 0 auto;
