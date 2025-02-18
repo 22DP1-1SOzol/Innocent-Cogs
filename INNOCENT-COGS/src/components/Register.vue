@@ -35,12 +35,14 @@
   
   <script setup>
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
   
   // Data for user input
   const name = ref('');
   const email = ref('');
   const password = ref('');
   const confirmPassword = ref('');
+  const router = useRouter();
   
   // Handle the registration form submission
   const handleRegister = () => {
@@ -50,14 +52,32 @@
     }
   
     if (name.value && email.value && password.value && confirmPassword.value) {
-      // Here you can add registration logic (e.g., save to database or call an API)
-      console.log('Registered with:', name.value, email.value, password.value);
-      // For now, let's just clear the inputs after submit
+      // Check if the email is already registered
+      const existingUser = localStorage.getItem(email.value);
+  
+      if (existingUser) {
+        alert('This email is already registered. Please login.');
+        return;
+      }
+  
+      // Store the new user in localStorage
+      const userData = {
+        name: name.value,
+        email: email.value,
+        password: password.value,
+      };
+      localStorage.setItem(email.value, JSON.stringify(userData));
+  
+      // Clear the form fields
       name.value = '';
       email.value = '';
       password.value = '';
       confirmPassword.value = '';
-      alert('Registration successful');
+  
+      alert('Registration successful!');
+  
+      // Redirect to login page after successful registration
+      router.push('/login');
     } else {
       alert('Please fill in all fields.');
     }
@@ -65,35 +85,50 @@
   </script>
   
   <style scoped>
+  body {
+    background-image: url('@/Images/InnocentCogsLogo.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+  
   .register-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
+    max-width: 500px;
+    width: 100%; /* Ensure full width up to max-width */
+    padding: 35px;
+    background-color: rgba(63, 193, 201, 0.8);
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   h3 {
     text-align: center;
-    color: #333;
+    color: #000000;
   }
   
   .input-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
   }
   
   label {
     display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: #555;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #000000;
   }
   
   input {
     width: 100%;
-    padding: 10px;
-    font-size: 14px;
+    padding: 12px;
+    font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 4px;
   }
@@ -107,8 +142,8 @@
   }
   
   button {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 12px 24px;
+    font-size: 18px;
     color: #fff;
     background-color: #4A90E2;
     border: none;
@@ -123,7 +158,7 @@
   .login-link {
     text-align: center;
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 16px;
   }
   
   .login-link a {

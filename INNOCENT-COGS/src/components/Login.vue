@@ -25,95 +25,46 @@
   
   <script setup>
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
   
   // Data for email and password
   const email = ref('');
   const password = ref('');
+  const router = useRouter();
   
   // Handle the login form submission
   const handleLogin = () => {
+    // Check if the email and password fields are filled
     if (email.value && password.value) {
-      // Here you can add login logic (e.g., authentication with backend)
-      console.log('Logged in with:', email.value, password.value);
-      // For now, let's just clear the inputs after submit
-      email.value = '';
-      password.value = '';
-      alert('Login successful');
+      // Retrieve stored user data from localStorage
+      const storedUser = localStorage.getItem(email.value);
+  
+      if (!storedUser) {
+        alert('User does not exist!');
+        return;
+      }
+  
+      // Parse stored data
+      const userData = JSON.parse(storedUser);
+  
+      // Check if the entered password matches the stored password
+      if (userData.password !== password.value) {
+        alert('Incorrect password!');
+        return;
+      }
+  
+      // Simulate login by storing an "authToken" in localStorage
+      localStorage.setItem('authToken', 'dummy-token');
+      alert('Login successful!');
+  
+      // Redirect to the blank page after successful login
+      router.push('/blank');
     } else {
       alert('Please enter both email and password.');
     }
   };
   </script>
   
-  <style scoped>
-  .login-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h3 {
-    text-align: center;
-    color: #333;
-  }
-  
-  .input-group {
-    margin-bottom: 15px;
-  }
-  
-  label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: #555;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  input:focus {
-    border-color: #4A90E2;
-  }
-  
-  .button-group {
-    text-align: center;
-  }
-  
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #4A90E2;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #357ABD;
-  }
-  
-  .register-link {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
-  }
-  
-  .register-link a {
-    color: #4A90E2;
-    text-decoration: none;
-  }
-  
-  .register-link a:hover {
-    text-decoration: underline;
-  }
-  </style>
+  <!-- Import external CSS file -->
+  <style src="../styles/Login.css"></style>
   
