@@ -1,111 +1,119 @@
 <template>
-    <div class="form-container">
-      <h2>Login</h2>
-      <form @submit.prevent="submitLogin">
+    <div class="login-container">
+      <h3>Login Page</h3>
+      <form @submit.prevent="handleLogin">
         <div class="input-group">
           <label for="email">Email</label>
-          <input
-            v-model="email"
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            required
-          />
-          <span v-if="emailError" class="error">{{ emailError }}</span>
+          <input type="email" id="email" v-model="email" required placeholder="Enter your email" />
         </div>
   
         <div class="input-group">
           <label for="password">Password</label>
-          <input
-            v-model="password"
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            required
-          />
-          <span v-if="passwordError" class="error">{{ passwordError }}</span>
+          <input type="password" id="password" v-model="password" required placeholder="Enter your password" />
         </div>
   
-        <button type="submit">Login</button>
-        <p>
-          Don't have an account? <router-link to="/register">Register here</router-link>
-        </p>
+        <div class="button-group">
+          <button type="submit">Login</button>
+        </div>
       </form>
+  
+      <p class="register-link">
+        Don't have an account? <router-link to="/register">Register</router-link>
+      </p>
     </div>
   </template>
   
-  <script>
-  export default {
-    data() {
-      return {
-        email: '',
-        password: '',
-        emailError: '',
-        passwordError: '',
-      };
-    },
-    methods: {
-      submitLogin() {
-        // Reset errors
-        this.emailError = '';
-        this.passwordError = '';
+  <script setup>
+  import { ref } from 'vue';
   
-        // Validate email and password
-        if (!this.email) {
-          this.emailError = 'Email is required';
-          return;
-        }
+  // Data for email and password
+  const email = ref('');
+  const password = ref('');
   
-        if (!this.password) {
-          this.passwordError = 'Password is required';
-          return;
-        }
-  
-        // Process login (For now, we will just log the values)
-        alert(`Login successful for ${this.email}`);
-      },
-    },
+  // Handle the login form submission
+  const handleLogin = () => {
+    if (email.value && password.value) {
+      // Here you can add login logic (e.g., authentication with backend)
+      console.log('Logged in with:', email.value, password.value);
+      // For now, let's just clear the inputs after submit
+      email.value = '';
+      password.value = '';
+      alert('Login successful');
+    } else {
+      alert('Please enter both email and password.');
+    }
   };
   </script>
   
   <style scoped>
-  .form-container {
+  .login-container {
     max-width: 400px;
-    margin: 50px auto;
+    margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    background-color: #f9f9f9;
     border-radius: 8px;
-    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h3 {
+    text-align: center;
+    color: #333;
   }
   
   .input-group {
     margin-bottom: 15px;
   }
   
+  label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
   input {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
+    font-size: 14px;
+    border: 1px solid #ddd;
     border-radius: 4px;
+  }
+  
+  input:focus {
+    border-color: #4A90E2;
+  }
+  
+  .button-group {
+    text-align: center;
   }
   
   button {
-    width: 100%;
-    padding: 10px;
-    background-color: #333;
-    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #4A90E2;
     border: none;
     border-radius: 4px;
+    cursor: pointer;
   }
   
   button:hover {
-    background-color: #555;
+    background-color: #357ABD;
   }
   
-  .error {
-    color: red;
-    font-size: 0.9em;
+  .register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+  }
+  
+  .register-link a {
+    color: #4A90E2;
+    text-decoration: none;
+  }
+  
+  .register-link a:hover {
+    text-decoration: underline;
   }
   </style>
   

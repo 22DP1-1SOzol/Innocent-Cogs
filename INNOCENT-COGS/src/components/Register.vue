@@ -1,136 +1,138 @@
 <template>
-    <div class="form-container">
-      <h2>Register</h2>
-      <form @submit.prevent="submitRegister">
+    <div class="register-container">
+      <h3>Register Page</h3>
+      <form @submit.prevent="handleRegister">
+        <div class="input-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" v-model="name" required placeholder="Enter your full name" />
+        </div>
+  
         <div class="input-group">
           <label for="email">Email</label>
-          <input
-            v-model="email"
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            required
-          />
-          <span v-if="emailError" class="error">{{ emailError }}</span>
+          <input type="email" id="email" v-model="email" required placeholder="Enter your email" />
         </div>
   
         <div class="input-group">
           <label for="password">Password</label>
-          <input
-            v-model="password"
-            type="password"
-            id="password"
-            placeholder="Create a password"
-            required
-          />
-          <span v-if="passwordError" class="error">{{ passwordError }}</span>
+          <input type="password" id="password" v-model="password" required placeholder="Enter your password" />
         </div>
   
         <div class="input-group">
           <label for="confirmPassword">Confirm Password</label>
-          <input
-            v-model="confirmPassword"
-            type="password"
-            id="confirmPassword"
-            placeholder="Confirm your password"
-            required
-          />
-          <span v-if="confirmPasswordError" class="error">{{ confirmPasswordError }}</span>
+          <input type="password" id="confirmPassword" v-model="confirmPassword" required placeholder="Confirm your password" />
         </div>
   
-        <button type="submit">Register</button>
-        <p>
-          Already have an account? <router-link to="/login">Login here</router-link>
-        </p>
+        <div class="button-group">
+          <button type="submit">Register</button>
+        </div>
       </form>
+  
+      <p class="login-link">
+        Already have an account? <router-link to="/login">Login</router-link>
+      </p>
     </div>
   </template>
   
-  <script>
-  export default {
-    data() {
-      return {
-        email: '',
-        password: '',
-        confirmPassword: '',
-        emailError: '',
-        passwordError: '',
-        confirmPasswordError: '',
-      };
-    },
-    methods: {
-      submitRegister() {
-        // Reset errors
-        this.emailError = '';
-        this.passwordError = '';
-        this.confirmPasswordError = '';
+  <script setup>
+  import { ref } from 'vue';
   
-        // Validate fields
-        if (!this.email) {
-          this.emailError = 'Email is required';
-          return;
-        }
+  // Data for user input
+  const name = ref('');
+  const email = ref('');
+  const password = ref('');
+  const confirmPassword = ref('');
   
-        if (!this.password) {
-          this.passwordError = 'Password is required';
-          return;
-        }
+  // Handle the registration form submission
+  const handleRegister = () => {
+    if (password.value !== confirmPassword.value) {
+      alert("Passwords don't match. Please try again.");
+      return;
+    }
   
-        if (!this.confirmPassword) {
-          this.confirmPasswordError = 'Confirm your password';
-          return;
-        }
-  
-        if (this.password !== this.confirmPassword) {
-          this.confirmPasswordError = 'Passwords do not match';
-          return;
-        }
-  
-        // Process registration (For now, we just log the values)
-        alert(`Registration successful for ${this.email}`);
-      },
-    },
+    if (name.value && email.value && password.value && confirmPassword.value) {
+      // Here you can add registration logic (e.g., save to database or call an API)
+      console.log('Registered with:', name.value, email.value, password.value);
+      // For now, let's just clear the inputs after submit
+      name.value = '';
+      email.value = '';
+      password.value = '';
+      confirmPassword.value = '';
+      alert('Registration successful');
+    } else {
+      alert('Please fill in all fields.');
+    }
   };
   </script>
   
   <style scoped>
-  .form-container {
+  .register-container {
     max-width: 400px;
-    margin: 50px auto;
+    margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    background-color: #f9f9f9;
     border-radius: 8px;
-    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h3 {
+    text-align: center;
+    color: #333;
   }
   
   .input-group {
     margin-bottom: 15px;
   }
   
+  label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
   input {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
+    font-size: 14px;
+    border: 1px solid #ddd;
     border-radius: 4px;
+  }
+  
+  input:focus {
+    border-color: #4A90E2;
+  }
+  
+  .button-group {
+    text-align: center;
   }
   
   button {
-    width: 100%;
-    padding: 10px;
-    background-color: #333;
-    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #4A90E2;
     border: none;
     border-radius: 4px;
+    cursor: pointer;
   }
   
   button:hover {
-    background-color: #555;
+    background-color: #357ABD;
   }
   
-  .error {
-    color: red;
-    font-size: 0.9em;
+  .login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+  }
+  
+  .login-link a {
+    color: #4A90E2;
+    text-decoration: none;
+  }
+  
+  .login-link a:hover {
+    text-decoration: underline;
   }
   </style>
   
