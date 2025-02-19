@@ -22,7 +22,7 @@
 6. **Atpakaļ uz pieteikšanos**  
    Augšpusē esošā poga "Atpakaļ uz pieteikšanos" ļauj lietotājiem atgriezties pieteikšanās lapā.
 
-#Nākotnes plāni
+# Nākotnes plāni
 
 1. Vizualie interaktīvie teksta bloki
 Lietotāji var mainīt teksta bloka izmēru, velkot jebkuru tā sānu, un brīvi pārvietot to jebkurā ekrāna vietā.
