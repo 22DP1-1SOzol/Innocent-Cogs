@@ -44,16 +44,11 @@ textarea {
   resize: vertical;
 }
 
-.save-button-container {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-button {
+/* Save Button */
+.save-button {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #4A90E2;
+  background-color: #4A90E2; /* Ensure solid background */
   color: white;
   border: none;
   border-radius: 4px;
@@ -61,11 +56,63 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+.save-button:hover {
   background-color: #357ABD;
 }
 
-button:disabled {
+.save-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+button:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+/* Load Button */
+.load-button-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.label-load {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #f0ad4e;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.label-load:hover {
+  background-color: #ec971f;
+}
+/* Auto-save message */
+.auto-save-message {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Word & Character Count */
+.word-count-container {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #444;
+  text-align: right;
+  background-color: rgba(255, 255, 255, 0.973); /* Light gray backdrop */
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+
+
