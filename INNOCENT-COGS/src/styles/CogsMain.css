@@ -9,6 +9,7 @@
   box-sizing: border-box;
 }
 
+/* Back to Login */
 .back-to-login-container {
   position: absolute;
   top: 20px;
@@ -17,19 +18,21 @@
   z-index: 10;
 }
 
+/* Text Block */
 .text-block {
-  width: 100%;
-  max-width: 900px;
-  height: 60%;
-  padding: 20px;
+  position: absolute;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: auto;
-  margin-top: 80px;
+  overflow: hidden;
   box-sizing: border-box;
-  transition: all 0.3s ease;
+  cursor: grab;
+}
+
+.text-block:active {
+  cursor: grabbing;
 }
 
 textarea {
@@ -41,14 +44,63 @@ textarea {
   border-radius: 4px;
   background-color: #fff;
   box-sizing: border-box;
-  resize: vertical;
+  resize: none;
+}
+
+/* Resize Handle */
+.resize-handle {
+  width: 10px;
+  height: 10px;
+  background-color: #4A90E2;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+/* Delete Button */
+.delete-button {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  background-color: red;
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: darkred;
+}
+
+/* Add Text Block Button */
+.add-block-button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-block-button:hover {
+  background-color: #45a049;
 }
 
 /* Save Button */
-.save-button {
+.save-button-container {
+  margin-top: 10px;
+}
+
+.save-button-container button {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #4A90E2; /* Ensure solid background */
+  background-color: #4A90E2;
   color: white;
   border: none;
   border-radius: 4px;
@@ -56,19 +108,15 @@ textarea {
   transition: background-color 0.3s ease;
 }
 
-.save-button:hover {
+.save-button-container button:hover {
   background-color: #357ABD;
 }
 
-.save-button:disabled {
+.save-button-container button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-button:disabled {
-  opacity: 1;
-  cursor: not-allowed;
-}
 /* Load Button */
 .load-button-container {
   margin-top: 10px;
@@ -93,6 +141,7 @@ input[type="file"] {
 .label-load:hover {
   background-color: #ec971f;
 }
+
 /* Auto-save message */
 .auto-save-message {
   position: absolute;
@@ -108,11 +157,8 @@ input[type="file"] {
   font-size: 14px;
   color: #444;
   text-align: right;
-  background-color: rgba(255, 255, 255, 0.973); /* Light gray backdrop */
+  background-color: rgba(255, 255, 255, 0.973);
   padding: 5px 10px;
   border-radius: 4px;
   display: inline-block;
 }
-
-
-
