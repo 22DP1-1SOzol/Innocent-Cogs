@@ -29,7 +29,7 @@
       <div class="resize-handle" @mousedown="startResize(index, $event)"></div>
 
       <!-- Delete Button -->
-      <button class="delete-button" @click="deleteTextBlock(index)"></button>
+      <button class="delete-button" @click="deleteTextBlock(index)">X</button>
     </div>
 
     <!-- Word & Character Count -->
@@ -45,7 +45,7 @@
 
     <!-- Save Button -->
     <div class="save-button-container">
-      <button @click="saveTextFile" :disabled="textBlocks.length === 0">Save as .txt</button>
+      <button @click="saveTextFile" :disabled="textBlocks.length === 0">Save as ZIP</button>
     </div>
   </div>
 </template>
@@ -53,6 +53,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import JSZip from 'jszip';
 import '../styles/CogsMain.css';
 
 const router = useRouter();
@@ -138,15 +139,36 @@ const autoSaveText = () => {
   }, 1000);
 };
 
-// Save text as .txt files in a ZIP
-const saveTextFile = () => {
+// Save all text blocks as .txt files inside a ZIP archive
+const saveTextFile = async () => {
+  if (textBlocks.value.length === 0) return;
+
+  const zip = new JSZip();
+
   textBlocks.value.forEach((block, i) => {
-    const blob = new Blob([block.content], { type: 'text/plain' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `text_block_${i + 1}.txt`;
-    link.click();
+    zip.file(`text_block_${i + 1}.txt`, block.content);
   });
+
+  const blob = await zip.generateAsync({ type: "blob" });
+
+  // Check for File System Access API support
+  if ('showSaveFilePicker' in window) {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: 'text_blocks.zip',
+      types: [{
+        description: 'ZIP Files',
+        accept: { 'application/zip': ['.zip'] }
+      }]
+    });
+    const writableStream = await handle.createWritable();
+    await writableStream.write(blob);
+    await writableStream.close();
+  } else {
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "text_blocks.zip";
+    link.click();
+  }
 };
 
 // Load .txt file
