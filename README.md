@@ -22,11 +22,11 @@
 6. **Atpakaļ uz pieteikšanos**  
    Augšpusē esošā poga "Atpakaļ uz pieteikšanos" ļauj lietotājiem atgriezties pieteikšanās lapā.
 
-#Nākotnes plāni
+## Nākotnes plāni
 
 1. Vizualie interaktīvie teksta bloki
-Lietotāji var mainīt teksta bloka izmēru, velkot jebkuru tā sānu, un brīvi pārvietot to jebkurā ekrāna vietā.
-Var izveidot vairākus teksta blokos.
+   Lietotāji var mainīt teksta bloka izmēru, velkot jebkuru tā sānu, un brīvi pārvietot to jebkurā ekrāna vietā.
+   Var izveidot vairākus teksta blokos.
 2. Saglabāšana un lejupielāde
-Noklikšķinot uz saglabāšanas pogas, pašreizējie teksta bloki tiks saglabāti kā atsevišķi .txt faili, kas visi tiks saspiesti vienā ZIP failā vieglai lejupielādei.
-Ielādējot .txt failus, ielādēto failu skaits noteiks, cik daudz teksta bloku tiks izveidots, katrs aizpildīts ar atbilstošo saturu no failiem.
+   Noklikšķinot uz saglabāšanas pogas, pašreizējie teksta bloki tiks saglabāti kā atsevišķi .txt faili, kas visi tiks saspiesti vienā ZIP failā    vieglai lejupielādei.
+   Ielādējot .txt failus, ielādēto failu skaits noteiks, cik daudz teksta bloku tiks izveidots, katrs aizpildīts ar atbilstošo saturu no failiem.
