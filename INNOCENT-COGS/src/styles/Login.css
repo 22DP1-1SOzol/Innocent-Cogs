@@ -1,60 +1,59 @@
 /* Login.css */
 body {
-  background-image: url('@/Images/InnocentCogsLogo.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
+  /* Remove background image from body to avoid conflicts with galaxy gradient */
+  background-color: #000000; /* Solid background color */
   margin: 0;
+  padding: 0;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding-left: 20px;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  height: 100vh; /* Ensure the body takes the full viewport height */
+  overflow: hidden; /* Prevent scrolling */
 }
 
 .login-container {
   max-width: 500px;
-  margin-top: 50px;
+  width: 100%; /* Ensure full width up to max-width */
   padding: 35px;
   background-color: rgba(63, 193, 201, 0.9);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(187, 2, 2, 0.1);
   position: relative;
   z-index: 1;
-  /* other styles... */
+  /* Removed background image properties */
 }
 
 /* Header styling */
 h3 {
   text-align: center;
   color: #000000;
-  font-size: 24px; /* Bigger font size for header */
-  margin-bottom: 20px; /* Add margin to separate header from form */
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 /* Form styling */
 .input-group {
-  margin-bottom: 20px; /* Add space between input fields */
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  font-size: 16px; /* Larger font size for readability */
-  margin-bottom: 8px; /* Space between label and input */
+  font-size: 16px;
+  margin-bottom: 8px;
   color: #000000;
 }
 
 input {
   width: 100%;
-  padding: 12px; /* Add padding for better usability */
-  font-size: 16px; /* Larger font size */
+  padding: 12px;
+  font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  box-sizing: border-box; /* Ensures padding doesn’t affect the width */
+  box-sizing: border-box;
 }
 
 input:focus {
-  border-color: #4A90E2; /* Blue border when input is focused */
+  border-color: #4A90E2;
 }
 
 /* Button styling */
@@ -70,11 +69,11 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  width: 100%; /* Make button full width */
+  width: 100%;
 }
 
 button:hover {
-  background-color: #357ABD; /* Hover effect for the button */
+  background-color: #357ABD;
 }
 
 /* Link styling */

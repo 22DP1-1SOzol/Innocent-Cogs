@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1></h1>
-    <h2></h2>
+    
+  
     
     <!-- Navigation Links -->
     
@@ -44,7 +44,7 @@ h2 {
 .router-view {
   margin-top: 20px;
   padding: 20px;
-  border: 1px solid #ffffff;
+  border: 1px solid #000000;
   border-radius: 5px;
   background-color: #000000;
 }
