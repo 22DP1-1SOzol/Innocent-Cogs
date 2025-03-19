@@ -45,7 +45,7 @@
 
     <!-- Save Button -->
     <div class="save-button-container">
-      <button @click="saveTextFile" :disabled="textBlocks.length === 0">Save as ZIP</button>
+      <button @click="saveTextFile" :disabled="textBlocks.length === 0">Save as TXT</button>
     </div>
   </div>
 </template>
@@ -53,7 +53,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import JSZip from 'jszip';
 import '../styles/CogsMain.css';
 
 const router = useRouter();
@@ -139,35 +138,41 @@ const autoSaveText = () => {
   }, 1000);
 };
 
-// Save all text blocks as .txt files inside a ZIP archive
+// Save each text block separately in a user-chosen folder
 const saveTextFile = async () => {
   if (textBlocks.value.length === 0) return;
 
-  const zip = new JSZip();
+  if ('showDirectoryPicker' in window) {
+    try {
+      const dirHandle = await window.showDirectoryPicker();
 
-  textBlocks.value.forEach((block, i) => {
-    zip.file(`text_block_${i + 1}.txt`, block.content);
-  });
+      for (let i = 0; i < textBlocks.value.length; i++) {
+        const block = textBlocks.value[i];
 
-  const blob = await zip.generateAsync({ type: "blob" });
+        // Extract first three words from content
+        let fileName = block.content
+          .trim()
+          .split(/\s+/) // Split by whitespace
+          .slice(0, 3)  // Get first 3 words
+          .join("_")    // Join with underscores
+          .replace(/[^a-zA-Z0-9_-]/g, ""); // Remove special characters
 
-  // Check for File System Access API support
-  if ('showSaveFilePicker' in window) {
-    const handle = await window.showSaveFilePicker({
-      suggestedName: 'text_blocks.zip',
-      types: [{
-        description: 'ZIP Files',
-        accept: { 'application/zip': ['.zip'] }
-      }]
-    });
-    const writableStream = await handle.createWritable();
-    await writableStream.write(blob);
-    await writableStream.close();
+        if (!fileName) {
+          fileName = `text_block_${i + 1}`; // Default if content is empty
+        }
+
+        const fileHandle = await dirHandle.getFileHandle(`${fileName}.txt`, { create: true });
+        const writable = await fileHandle.createWritable();
+        await writable.write(block.content);
+        await writable.close();
+      }
+
+      alert("Files saved successfully!");
+    } catch (err) {
+      console.error("Error saving files:", err);
+    }
   } else {
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "text_blocks.zip";
-    link.click();
+    alert("Your browser does not support saving files to a chosen folder.");
   }
 };
 
