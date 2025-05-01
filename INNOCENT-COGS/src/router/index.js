@@ -30,4 +30,11 @@ const router = createRouter({
   routes,
 });
 
+// Global navigation guard to handle route errors
+router.onError((error) => {
+  console.error("Routing error:", error);
+  // Optionally, redirect to a 404 or error page
+  router.push('/login');
+});
+
 export default router;
