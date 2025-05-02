@@ -55,17 +55,16 @@ export default {
       try {
         if (isRegistering.value) {
           await createUserWithEmailAndPassword(auth, email.value, password.value)
-          alert('Reģistrācija veiksmīga!')
-          router.push('/notes')
         } else {
           await signInWithEmailAndPassword(auth, email.value, password.value)
-          alert('Pieteikšanās veiksmīga!')
-          router.push('/notes')
         }
+        router.push('/notes') // Seamless redirect on success
       } catch (err) {
-        alert(err.message)
+        console.error('Authentication error:', err.message)
+        // Optional: set an error message ref to show it under inputs later
       }
-    }
+}
+
 
     function toggleMode() {
       isRegistering.value = !isRegistering.value
@@ -90,37 +89,41 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #f9f9f9;
+  background: var(--color-dark);
 }
 
 .login-card {
-  background: white;
+  background: var(--color-plum);
   padding: 2rem 2.5rem;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   text-align: center;
   width: 320px;
+  color: white;
 }
 
 .logo {
   font-family: 'Monoton', cursive;
   font-size: 2rem;
   margin-bottom: 1.5rem;
+  color: var(--color-peach);
 }
 
 .form-group input {
   width: 100%;
   padding: 0.6rem;
   margin-bottom: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-rose);
   border-radius: 6px;
   font-size: 14px;
+  background-color: #fff;
+  color: var(--color-dark);
 }
 
 .form-group button {
   width: 100%;
   padding: 0.6rem;
-  background-color: #007acc;
+  background-color: var(--color-rose);
   color: white;
   border: none;
   border-radius: 6px;
@@ -130,12 +133,13 @@ export default {
 }
 
 .form-group button:hover {
-  background-color: #005fa3;
+  background-color: var(--color-peach);
+  color: var(--color-dark);
 }
 
 .switch {
   font-size: 13px;
-  color: #007acc;
+  color: var(--color-peach);
   cursor: pointer;
   margin-top: 1rem;
   text-decoration: underline;
@@ -145,12 +149,13 @@ export default {
   display: block;
   margin-top: 2rem;
   font-size: 14px;
-  color: #007acc;
+  color: var(--color-peach);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .about-link:hover {
-  color: #333;
+  color: var(--color-rose);
 }
+
 </style>

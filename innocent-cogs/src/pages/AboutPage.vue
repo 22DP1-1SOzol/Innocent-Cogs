@@ -37,18 +37,19 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #f8f9fa;
+  background: var(--color-dark);
 }
 
 .about-card {
-  background: white;
+  background: var(--color-plum);
   padding: 2rem 3rem;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   text-align: center;
   max-width: 480px;
   width: 90%;
   font-family: 'Segoe UI', sans-serif;
+  color: white;
 }
 
 h1 {
@@ -57,24 +58,25 @@ h1 {
 }
 
 .highlight {
-  color: #3b7a57;
+  color: var(--color-peach);
 }
 
 p {
   margin: 0.5rem 0;
-  color: #444;
+  color: white;
 }
 
 .back-link {
   display: inline-block;
   margin-top: 1.5rem;
   text-decoration: none;
-  color: #007acc;
+  color: var(--color-peach);
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .back-link:hover {
-  color: #005ea2;
+  color: var(--color-rose);
 }
+
 </style>

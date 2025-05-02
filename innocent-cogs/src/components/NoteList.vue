@@ -30,25 +30,27 @@ export default {
 .note-list {
   width: 220px;
   padding: 1rem;
-  background: rgb(252, 251, 251);
+  background: var(--color-plum);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
+  color: white;
 }
 
 h2 {
   font-size: 1.1rem;
   margin-bottom: 1rem;
   font-weight: 600;
-  color: #333;
-  text-align: center; /* This ensures text itself is centered */
-  width: 100%; /* Allows the text-align to work reliably */
+  color: var(--color-peach);
+  text-align: center;
+  width: 100%;
 }
 
 button {
-  background-color: #f3f4f6;
-  border: 1px solid #ccc;
+  background-color: var(--color-rose);
+  color: white;
+  border: none;
   border-radius: 6px;
   padding: 0.4rem 0.8rem;
   margin-bottom: 1rem;
@@ -57,7 +59,8 @@ button {
 }
 
 button:hover {
-  background-color: #e5e7eb;
+  background-color: var(--color-peach);
+  color: var(--color-dark);
 }
 
 ul {
@@ -71,17 +74,20 @@ li {
   margin-bottom: 6px;
   border-radius: 6px;
   cursor: pointer;
-  color: #333;
+  background-color: transparent;
+  color: white;
   font-size: 14px;
   transition: background 0.2s;
 }
 
 li.active {
-  background-color: #e0edff;
+  background-color: var(--color-dark);
   font-weight: 600;
 }
 
 li:hover {
-  background-color: #f0f0f0;
+  background-color: var(--color-peach);
+  color: var(--color-dark);
 }
+
 </style>

@@ -7,14 +7,12 @@
     <transition name="slide-down">
       <div v-if="open" class="menu">
         <ul>
-            <li @click="select('New Note')">📝 New Note</li>
-            <li @click="select('Export Notes')">📤 Export Notes</li>
-            <li @click="select('Import Notes')">📥 Import Notes</li>
-            <li @click="select('About')">ℹ️ About</li>
-            <li class="divider"></li>
-            <li @click="select('Logout')">🚪 Iziet</li>
+          <li @click="select('Export Notes')">📤 Export Notes</li>
+          <li @click="select('Import Notes')">📥 Import Notes</li>
+          <li @click="select('About')">ℹ️ About</li>
+          <li class="divider"></li>
+          <li @click="select('Logout')">🚪 Iziet</li>
         </ul>
-
       </div>
     </transition>
   </div>
@@ -42,34 +40,36 @@ export default {
 <style scoped>
 .dropdown-container {
   position: relative;
-  display: inline-block;
+  z-index: 1000;
 }
 
 .hamburger {
   font-size: 24px;
-  background: none;
+  background: var(--color-peach);
   border: none;
+  color: var(--color-dark);
   cursor: pointer;
-  color: #444;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
   transition: background 0.2s ease;
 }
 .hamburger:hover {
-  background-color: #eaeaea;
+  background-color: var(--color-rose);
+  color: white;
 }
 
 .menu {
   position: absolute;
   top: 100%;
   left: 0;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  z-index: 1001;
   min-width: 180px;
+  background-color: var(--color-peach);
+  color: var(--color-dark);
+  border: 1px solid var(--color-rose);
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   padding: 0.5rem 0;
-  z-index: 200;
 }
 
 .menu ul {
@@ -85,28 +85,26 @@ export default {
   transition: background 0.2s ease;
 }
 .menu li:hover {
-  background-color: #f6f7f8;
+  background-color: var(--color-rose);
+  color: white;
 }
 
-/* Slide-down animation */
+.divider {
+  border-top: 1px solid var(--color-rose);
+  margin: 0.3rem 0;
+  pointer-events: none;
+}
+
+/* Animation */
 .slide-down-enter-active {
   transition: all 0.25s ease-out;
 }
 .slide-down-leave-active {
   transition: all 0.2s ease-in;
 }
-.slide-down-enter-from {
-  opacity: 0;
-  transform: translateY(-8px);
-}
+.slide-down-enter-from,
 .slide-down-leave-to {
   opacity: 0;
   transform: translateY(-8px);
 }
-.divider {
-  border-top: 1px solid #eee;
-  margin: 0.3rem 0;
-  pointer-events: none;
-}
-
 </style>

@@ -21,10 +21,15 @@
         @delete-note="deleteNote"
       />
     </div>
+
+    <div v-if="showEnvelope" class="envelope-animation">✉️</div>
   </div>
+  <Whiteboard v-if="showPanel" :notes="notes" />
+
 </template>
 
 <script>
+import Whiteboard from './components/Whiteboard.vue'
 import { signOut } from 'firebase/auth'
 import { auth } from './firebase'
 import { router } from './router'
@@ -41,6 +46,31 @@ export default {
     DropdownMenu
   },
   setup() {
+    const showPanel = ref(false)
+
+    const showEnvelope = ref(false)
+
+    function exportNotes() {
+      const now = new Date().toISOString().split('T')[0]
+      const filename = `innocent-cogs-notes-${now}.json`
+
+      const blob = new Blob([JSON.stringify(notes.value, null, 2)], {
+        type: 'application/json'
+      })
+
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = filename
+      link.click()
+      URL.revokeObjectURL(url)
+
+      showEnvelope.value = true
+      setTimeout(() => {
+        showEnvelope.value = false
+      }, 1000)
+    }
+
     const STORAGE_KEY = 'innocent-cogs-notes'
     const notes = ref(JSON.parse(localStorage.getItem(STORAGE_KEY)) || [])
     const selectedNoteId = ref(notes.value[0]?.id || null)
@@ -81,51 +111,44 @@ export default {
     }
 
     async function handleMenuSelect(option) {
-  if (option === 'New Note') {
-    createNote()
-  } else if (option === 'Export Notes') {
-    const blob = new Blob([JSON.stringify(notes.value)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'innocent-cogs-notes.json'
-    link.click()
-    URL.revokeObjectURL(url)
-  } else if (option === 'Import Notes') {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = 'application/json'
-    input.onchange = (e) => {
-      const file = e.target.files[0]
-      const reader = new FileReader()
-      reader.onload = () => {
-        try {
-          const imported = JSON.parse(reader.result)
-          if (Array.isArray(imported)) {
-            notes.value = imported
-            selectedNoteId.value = notes.value[0]?.id || null
-          } else {
-            alert('Invalid file format.')
+      if (option === 'New Note') {
+        createNote()
+      } else if (option === 'Export Notes') {
+        exportNotes()
+      } else if (option === 'Import Notes') {
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.accept = 'application/json'
+        input.onchange = (e) => {
+          const file = e.target.files[0]
+          const reader = new FileReader()
+          reader.onload = () => {
+            try {
+              const imported = JSON.parse(reader.result)
+              if (Array.isArray(imported)) {
+                notes.value = imported
+                selectedNoteId.value = notes.value[0]?.id || null
+              } else {
+                alert('Invalid file format.')
+              }
+            } catch {
+              alert('Error reading file.')
+            }
           }
-        } catch {
-          alert('Error reading file.')
+          reader.readAsText(file)
+        }
+        input.click()
+      } else if (option === 'About') {
+        router.push('/about')
+      } else if (option === 'Logout') {
+        try {
+          await signOut(auth)
+          router.push('/')
+        } catch (err) {
+          alert('Neizdevās iziet: ' + err.message)
         }
       }
-      reader.readAsText(file)
     }
-    input.click()
-  } else if (option === 'About') {
-    router.push('/about')
-  } else if (option === 'Logout') {
-    try {
-      await signOut(auth)
-      router.push('/')
-    } catch (err) {
-      alert('Neizdevās iziet: ' + err.message)
-    }
-  }
-}
-
 
     watch(notes, () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(notes.value))
@@ -139,7 +162,9 @@ export default {
       createNote,
       updateNote,
       deleteNote,
-      handleMenuSelect
+      handleMenuSelect,
+      showEnvelope,
+      showPanel
     }
   }
 }
@@ -157,28 +182,28 @@ export default {
   display: flex;
   align-items: center;
   padding: 1rem 2rem;
-  border-bottom: 1px solid #ccc;
-  background-color: rgb(255, 255, 255);
+  border-bottom: 1px solid var(--color-peach);
+  background-color: var(--color-dark);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 30px;
+  height: 60px;
   z-index: 100;
 }
-
+.dropdown-container {
+  position: relative;
+  z-index: 1000;
+}
 .title {
   margin-left: 1rem;
   font-size: 2rem;
-  font-family: 'Monoton', cursive; /* 👈 Monoton applied */
-  color: #155c35;
+  font-family: 'Monoton', cursive;
+  color: var(--color-peach);
   letter-spacing: 1.5px;
   font-weight: normal;
-  text-transform: uppercase; /* optional for bold look */
+  text-transform: uppercase;
 }
-
-
-
 
 .layout {
   display: flex;
@@ -187,7 +212,46 @@ export default {
   padding-top: 80px;
   flex: 1;
   overflow: auto;
-  background: #345d46;
+  background: var(--color-plum);
   font-family: 'Segoe UI', sans-serif;
+  color: white;
 }
+
+.envelope-animation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 64px;
+  z-index: 9999;
+  animation: pulseEnvelope 1.2s ease-out forwards;
+  pointer-events: none;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.7),
+    0 0 25px rgba(201, 87, 146, 0.5),  /* rose */
+    0 0 40px rgba(201, 87, 146, 0.3);
+}
+
+@keyframes pulseEnvelope {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  35% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(3.5);
+  }
+  65% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+
+
+
 </style>
