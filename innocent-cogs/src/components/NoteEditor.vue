@@ -94,6 +94,9 @@ export default {
 <style scoped>
 .editor {
   flex: 1;
+  max-width: 500px;            /* Wider max width for better space usage */
+  min-width: 300px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   background: var(--color-dark);
@@ -101,7 +104,9 @@ export default {
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   color: white;
+  box-sizing: border-box;
 }
+
 
 .title-input {
   font-size: 1.2rem;
@@ -112,6 +117,8 @@ export default {
   outline: none;
   background-color: var(--color-plum);
   color: white;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .title-input::placeholder {
@@ -122,24 +129,35 @@ export default {
   display: flex;
   justify-content: flex-start;
   background: var(--color-plum);
-  padding: 0.5rem 0.8rem;
+  padding: 0.5rem;
   border: 1px solid var(--color-peach);
   border-radius: 8px;
   margin-bottom: 1rem;
   flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+
 .button-group button {
-  margin: 4px 6px 4px 0;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border: none;
   border-radius: 4px;
   background-color: var(--color-rose);
   color: white;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: background 0.2s, transform 0.1s;
+  flex-shrink: 0;
 }
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 
 .button-group button:hover {
   background-color: var(--color-peach);
@@ -149,6 +167,7 @@ export default {
 
 .rich-editor {
   flex: 1;
+  width: 100%;
   min-height: 300px;
   border: 1px solid var(--color-peach);
   border-radius: 8px;
@@ -160,6 +179,26 @@ export default {
   font-family: inherit;
   margin-bottom: 1rem;
   overflow-y: auto;
+  box-sizing: border-box;
+}
+
+
+.rich-editor blockquote {
+  border-left: 4px solid var(--color-peach);
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  color: #ffd;
+  background-color: rgba(255, 255, 255, 0.05);
+  font-style: italic;
+}
+
+.rich-editor pre {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.8rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: monospace;
+  white-space: pre-wrap;
 }
 
 .delete-btn {
@@ -184,28 +223,25 @@ export default {
   box-shadow: 0 0 4px var(--color-peach);
 }
 
-li:hover {
-  background-color: var(--color-rose);
-  color: white;
-  transform: scale(1.01);
-  transition: 0.2s;
-}
-.rich-editor blockquote {
-  border-left: 4px solid var(--color-peach);
-  margin: 1rem 0;
-  padding: 0.5rem 1rem;
-  color: #ffd;
-  background-color: rgba(255, 255, 255, 0.05);
-  font-style: italic;
-}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .format-toolbar {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
 
-.rich-editor pre {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 0.8rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  font-family: monospace;
-  white-space: pre-wrap;
-}
+  .button-group button {
+    font-size: 0.95rem;
+    padding: 5px 8px;
+  }
 
+  .title-input {
+    font-size: 1rem;
+  }
+
+  .rich-editor {
+    font-size: 0.95rem;
+  }
+}
 </style>
+

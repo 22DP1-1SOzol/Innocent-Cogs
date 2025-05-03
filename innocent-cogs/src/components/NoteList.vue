@@ -28,7 +28,8 @@ export default {
 
 <style scoped>
 .note-list {
-  width: 220px;
+  flex-shrink: 0;
+  width: 240px;
   padding: 1rem;
   background: var(--color-plum);
   border-radius: 12px;
@@ -36,7 +37,17 @@ export default {
   display: flex;
   flex-direction: column;
   color: white;
+  box-sizing: border-box;
 }
+
+
+@media (max-width: 768px) {
+  .note-list {
+    flex: 1 1 100%;            /* Full width on smaller screens */
+    order: 1;                  /* Optional: appear above editor */
+  }
+}
+
 
 h2 {
   font-size: 1.1rem;

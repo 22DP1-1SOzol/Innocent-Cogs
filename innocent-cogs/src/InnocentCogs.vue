@@ -23,13 +23,20 @@
     </div>
 
     <div v-if="showEnvelope" class="envelope-animation">✉️</div>
-  </div>
-  <Whiteboard v-if="showPanel" :notes="notes" />
 
+    <button class="right-arrow-btn" @click="handleArrowClick">➤</button>
+
+    <SlidePanel
+  v-if="showPanel"
+  :visible="showPanel"
+  :notes="notes"
+  v-model:placedNotes="placedNotes"
+  @close="showPanel = false"
+  />
+  </div>
 </template>
 
 <script>
-import Whiteboard from './components/Whiteboard.vue'
 import { signOut } from 'firebase/auth'
 import { auth } from './firebase'
 import { router } from './router'
@@ -37,38 +44,23 @@ import { ref, computed, watch } from 'vue'
 import NoteList from './components/NoteList.vue'
 import NoteEditor from './components/NoteEditor.vue'
 import DropdownMenu from './components/DropdownMenu.vue'
+import SlidePanel from './components/SlidePanel.vue'
 
 export default {
   name: 'InnocentCogs',
   components: {
     NoteList,
     NoteEditor,
-    DropdownMenu
+    DropdownMenu,
+    SlidePanel
   },
   setup() {
     const showPanel = ref(false)
-
     const showEnvelope = ref(false)
+    const placedNotes = ref([])
 
-    function exportNotes() {
-      const now = new Date().toISOString().split('T')[0]
-      const filename = `innocent-cogs-notes-${now}.json`
-
-      const blob = new Blob([JSON.stringify(notes.value, null, 2)], {
-        type: 'application/json'
-      })
-
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = filename
-      link.click()
-      URL.revokeObjectURL(url)
-
-      showEnvelope.value = true
-      setTimeout(() => {
-        showEnvelope.value = false
-      }, 1000)
+    function handleArrowClick() {
+      showPanel.value = !showPanel.value
     }
 
     const STORAGE_KEY = 'innocent-cogs-notes'
@@ -114,7 +106,21 @@ export default {
       if (option === 'New Note') {
         createNote()
       } else if (option === 'Export Notes') {
-        exportNotes()
+        const now = new Date().toISOString().split('T')[0]
+        const filename = `innocent-cogs-notes-${now}.json`
+        const blob = new Blob([JSON.stringify(notes.value, null, 2)], {
+          type: 'application/json'
+        })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = filename
+        link.click()
+        URL.revokeObjectURL(url)
+        showEnvelope.value = true
+        setTimeout(() => {
+          showEnvelope.value = false
+        }, 1000)
       } else if (option === 'Import Notes') {
         const input = document.createElement('input')
         input.type = 'file'
@@ -164,20 +170,41 @@ export default {
       deleteNote,
       handleMenuSelect,
       showEnvelope,
-      showPanel
+      showPanel,
+      handleArrowClick,
+      placedNotes
     }
   }
 }
 </script>
 
 <style scoped>
+.right-arrow-btn {
+  position: fixed;
+  top: 50%;
+  right: -12px;
+  transform: translateY(-50%);
+  background-color: var(--color-peach);
+  border: none;
+  color: var(--color-dark);
+  font-size: 1.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px 0 0 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1000;
+  transition: background 0.3s ease;
+}
+.right-arrow-btn:hover {
+  background-color: var(--color-rose);
+  color: white;
+}
 .app-wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
 }
-
 .top-bar {
   display: flex;
   align-items: center;
@@ -191,10 +218,6 @@ export default {
   height: 60px;
   z-index: 100;
 }
-.dropdown-container {
-  position: relative;
-  z-index: 1000;
-}
 .title {
   margin-left: 1rem;
   font-size: 2rem;
@@ -204,9 +227,10 @@ export default {
   font-weight: normal;
   text-transform: uppercase;
 }
-
 .layout {
   display: flex;
+  justify-content: center;
+  align-items: flex-start;
   gap: 1.5rem;
   padding: 2rem;
   padding-top: 80px;
@@ -216,7 +240,6 @@ export default {
   font-family: 'Segoe UI', sans-serif;
   color: white;
 }
-
 .envelope-animation {
   position: fixed;
   top: 50%;
@@ -228,10 +251,9 @@ export default {
   pointer-events: none;
   text-shadow:
     0 0 10px rgba(255, 255, 255, 0.7),
-    0 0 25px rgba(201, 87, 146, 0.5),  /* rose */
+    0 0 25px rgba(201, 87, 146, 0.5),
     0 0 40px rgba(201, 87, 146, 0.3);
 }
-
 @keyframes pulseEnvelope {
   0% {
     opacity: 0;
@@ -250,8 +272,4 @@ export default {
     transform: translate(-50%, -50%) scale(1);
   }
 }
-
-
-
-
 </style>
