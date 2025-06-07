@@ -18,27 +18,41 @@
                 >
                   {{ note.title || 'Untitled Note' }}
                 </button>
-                <div
-                  v-else
-                  class="note-title-btn disabled"
-                >
-                  {{ note.title || 'Untitled Note' }} <span class="x-indicator">✔</span>
+                <div class="note-title-btn disabled" v-else>
+                  {{ note.title || 'Untitled Note' }}
+                  <button class="remove-btn-inline" @click.stop="removeNoteById(note.id)">✖</button>
                 </div>
               </div>
             </div>
           </transition>
         </div>
 
-        <div class="panel-content">
+        <div class="panel-content" ref="panel">
+          <!-- Notes and Dots inside wrapper -->
           <div
             v-for="(note, index) in placedNotes"
             :key="note.id"
-            class="draggable-note"
+            class="note-wrapper"
+            @mouseenter="hoveredNote = note.id"
+            @mouseleave="hoveredNote = null"
             :style="{ left: note.x + 'px', top: note.y + 'px' }"
-            @mousedown.prevent="startDrag($event, index)"
           >
-            {{ note.title || 'Untitled Note' }}
-            <button class="remove-btn" @click.stop="removeNote(index)">✖</button>
+            <div
+              class="draggable-note"
+              :ref="el => noteRefs[note.id] = el"
+              @mousedown.prevent="startDrag($event, index)"
+            >
+              {{ note.title || 'Untitled Note' }}
+            </div>
+
+            <!-- Dots on hover -->
+            <div
+              v-if="hoveredNote === note.id"
+              v-for="(offset, dir) in getDotOffsets(note)"
+              :key="dir"
+              class="dot"
+              :style="{ left: offset.x + 'px', top: offset.y + 'px' }"
+            ></div>
           </div>
         </div>
       </div>
@@ -48,7 +62,7 @@
 
 <script>
 export default {
-  name: 'SlidePanel',
+  name: 'SidePanel',
   props: {
     visible: Boolean,
     notes: Array,
@@ -60,58 +74,75 @@ export default {
       showList: true,
       draggingIndex: null,
       dragOffsetX: 0,
-      dragOffsetY: 0
-    }
+      dragOffsetY: 0,
+      noteRefs: {},
+      hoveredNote: null
+    };
   },
   methods: {
     toggleList() {
-      this.showList = !this.showList
+      this.showList = !this.showList;
     },
     isPlaced(note) {
-      return this.placedNotes.some(n => n.id === note.id)
+      return this.placedNotes.some(n => n.id === note.id);
     },
     placeNote(note) {
       if (!this.isPlaced(note)) {
         const newPlaced = [
           ...this.placedNotes,
           { id: note.id, title: note.title, x: 200, y: 100 }
-        ]
-        this.$emit('update:placedNotes', newPlaced)
+        ];
+        this.$emit('update:placedNotes', newPlaced);
       }
     },
-    removeNote(index) {
-      const updated = [...this.placedNotes]
-      updated.splice(index, 1)
-      this.$emit('update:placedNotes', updated)
+    removeNoteById(id) {
+      const updated = this.placedNotes.filter(note => note.id !== id);
+      this.$emit('update:placedNotes', updated);
     },
     startDrag(event, index) {
-      this.draggingIndex = index
-      const note = this.placedNotes[index]
-      this.dragOffsetX = event.clientX - note.x
-      this.dragOffsetY = event.clientY - note.y
-      window.addEventListener('mousemove', this.onDrag)
-      window.addEventListener('mouseup', this.stopDrag)
+      this.draggingIndex = index;
+      const note = this.placedNotes[index];
+      this.dragOffsetX = event.clientX - note.x;
+      this.dragOffsetY = event.clientY - note.y;
+      window.addEventListener('mousemove', this.onDrag);
+      window.addEventListener('mouseup', this.stopDrag);
     },
     onDrag(event) {
       if (this.draggingIndex !== null) {
-        const updated = [...this.placedNotes]
+        const updated = [...this.placedNotes];
         updated[this.draggingIndex] = {
           ...updated[this.draggingIndex],
           x: event.clientX - this.dragOffsetX,
           y: event.clientY - this.dragOffsetY
-        }
-        this.$emit('update:placedNotes', updated)
+        };
+        this.$emit('update:placedNotes', updated);
       }
     },
     stopDrag() {
-      this.draggingIndex = null
-      window.removeEventListener('mousemove', this.onDrag)
-      window.removeEventListener('mouseup', this.stopDrag)
+      this.draggingIndex = null;
+      window.removeEventListener('mousemove', this.onDrag);
+      window.removeEventListener('mouseup', this.stopDrag);
+    },
+    getNoteSize(noteId) {
+      const el = this.noteRefs[noteId];
+      if (!el) return { width: 150, height: 40 };
+      const rect = el.getBoundingClientRect();
+      return { width: rect.width, height: rect.height };
+    },
+    getDotOffsets(note) {
+      const size = this.getNoteSize(note.id);
+      const centerX = size.width / 2;
+      const centerY = size.height / 2;
+      return {
+        top: { x: centerX, y: -10 },
+        right: { x: size.width + 10, y: centerY },
+        bottom: { x: centerX, y: size.height + 10 },
+        left: { x: -10, y: centerY }
+      };
     }
   }
-}
+};
 </script>
-
 
 <style scoped>
 .slide-wrapper {
@@ -122,17 +153,14 @@ export default {
   bottom: 0;
   z-index: 900;
 }
-
 .slide-panel {
   height: 100%;
   background: var(--color-dark);
   display: flex;
   flex-direction: row;
   padding: 1rem;
-  box-sizing: border-box;
   overflow: hidden;
 }
-
 .left-controls {
   display: flex;
   flex-direction: column;
@@ -141,7 +169,6 @@ export default {
   padding-right: 1rem;
   border-right: 1px solid var(--color-peach);
 }
-
 .notes-toggle {
   background-color: var(--color-rose);
   color: white;
@@ -153,16 +180,13 @@ export default {
   width: 100%;
   margin-bottom: 0.5rem;
 }
-
 .note-list {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
   width: 100%;
 }
-
 .note-title-btn {
-  text-align: left;
   background: var(--color-peach);
   border: none;
   border-radius: 6px;
@@ -170,77 +194,68 @@ export default {
   font-size: 0.9rem;
   color: var(--color-dark);
   cursor: pointer;
-  transition: background 0.2s;
 }
-
-.note-title-btn:hover {
-  background-color: var(--color-rose);
-  color: white;
-}
-
 .note-title-btn.disabled {
-  cursor: default;
-  opacity: 0.6;
-  background-color: #888;
-  color: white;
+  background: linear-gradient(135deg, var(--color-peach), #fdd49a);
+  color: var(--color-dark);
   display: flex;
-  justify-content: space-between;
-  padding-right: 0.8rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.6rem 0.8rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), inset 0 0 0 2px var(--color-rose);
+  text-align: center;
+  gap: 0.6rem;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
-
-.x-indicator {
-  margin-left: 0.5rem;
+.remove-btn-inline {
+  background: none;
+  border: none;
+  color: var(--color-rose);
+  cursor: pointer;
 }
 
 .panel-content {
   flex: 1;
   position: relative;
-  overflow: hidden;
+}
+
+.note-wrapper {
+  position: absolute;
+  width: 200px;
+  height: 120px;
+  transform: translate(-25%, -25%);
+  pointer-events: auto;
+  z-index: 2;
 }
 
 .draggable-note {
   position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background: var(--color-peach);
   color: var(--color-dark);
   padding: 0.4rem 0.6rem;
   border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
   cursor: move;
-  font-weight: bold;
   user-select: none;
+  white-space: nowrap;
+  z-index: 3;
 }
 
-.remove-btn {
-  background: transparent;
-  border: none;
-  margin-left: 0.5rem;
-  color: var(--color-rose);
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.remove-btn:hover {
-  color: white;
-}
-
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.4s ease;
-}
-.slide-enter-from,
-.slide-leave-to {
-  transform: translateX(100%);
-}
-.slide-enter-to,
-.slide-leave-from {
-  transform: translateX(0%);
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: red;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  cursor: crosshair;
 }
 </style>
