@@ -252,7 +252,7 @@ export default {
   position: absolute;
   width: 10px;
   height: 10px;
-  background: red;
+  background: rgba(255, 0, 0, 0);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 4;
